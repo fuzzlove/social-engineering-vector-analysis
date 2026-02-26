@@ -1,13 +1,6 @@
-                ,"(
-               ////\                           _
-              (//////--,,,,,_____            ,"
-            _;"""----/////_______;,,        //
-__________;"o,-------------......"""""`'-._/(
-      ""'==._.__,;;;;"""           ____,.-.==
-             "-.:______,...;---""/"   "    \(
-                 '-._      `-._("   ctr     \\
-                     '-._                    '._
-
+<p align="center">
+<img/src="https://raw.githubusercontent.com/fuzzlove/social-engineering-vector-analysis/refs/heads/main/ascii-fisk-brikker.jpg" width="200" height="200">
+</p>
 
 These files are for educational purposes and references while studying various techniques used in the wild.
 
