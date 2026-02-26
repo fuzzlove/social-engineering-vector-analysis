@@ -25,3 +25,5 @@ I am not done yet with my research into these techniques most recently it has be
 Cheers! - Joseph McPeters (liquidsky)
 
 Each of these pages is meant to be very basic they could use work and obfuscation and its definitely not evilginx2 just basic implementations of whats being reported out in the wild.
+
+Thanks again to: mr d0x, google scripting, and google sites
