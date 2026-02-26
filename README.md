@@ -1,16 +1,12 @@
-           FISHKISSFISHKIS               
-       SFISHKISSFISHKISSFISH            F
-    ISHK   ISSFISHKISSFISHKISS         FI
-  SHKISS   FISHKISSFISHKISSFISS       FIS
-HKISSFISHKISSFISHKISSFISHKISSFISH    KISS
-  FISHKISSFISHKISSFISHKISSFISHKISS  FISHK
-      SSFISHKISSFISHKISSFISHKISSFISHKISSF
-  ISHKISSFISHKISSFISHKISSFISHKISSF  ISHKI
-SSFISHKISSFISHKISSFISHKISSFISHKIS    SFIS
-  HKISSFISHKISSFISHKISSFISHKISS       FIS
-    HKISSFISHKISSFISHKISSFISHK         IS
-       SFISHKISSFISHKISSFISH            K
-         ISSFISHKISSFISHK               
+                ,"(
+               ////\                           _
+              (//////--,,,,,_____            ,"
+            _;"""----/////_______;,,        //
+__________;"o,-------------......"""""`'-._/(
+      ""'==._.__,;;;;"""           ____,.-.==
+             "-.:______,...;---""/"   "    \(
+                 '-._      `-._("   ctr     \\
+                     '-._                    '._
 
 
 These files are for educational purposes and references while studying various techniques used in the wild.
